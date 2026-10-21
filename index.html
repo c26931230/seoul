@@ -764,6 +764,14 @@
                 <button
                   class="font-control"
                   type="button"
+                  data-font-size="medium"
+                  aria-pressed="false"
+                >
+                  中
+                </button>
+                <button
+                  class="font-control"
+                  type="button"
                   data-font-size="large"
                   aria-pressed="false"
                 >
@@ -2019,10 +2027,9 @@
         const fontSizeButtons = [...document.querySelectorAll(".font-control")];
 
         function setFontSize(size) {
-          const isLarge = size === "large";
           document.documentElement.style.setProperty(
             "--font-scale",
-            isLarge ? "1.5" : "1",
+            size === "large" ? "1.5" : size === "medium" ? "1.25" : "1",
           );
           fontSizeButtons.forEach((button) => {
             button.setAttribute(
@@ -2040,7 +2047,8 @@
         let savedFontSize = "small";
         try {
           const saved = localStorage.getItem(fontSizeStorageKey);
-          if (saved === "small" || saved === "large") savedFontSize = saved;
+          if (saved === "small" || saved === "medium" || saved === "large")
+            savedFontSize = saved;
         } catch (error) {
           console.warn("Unable to load font size preference.", error);
         }
