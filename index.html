@@ -596,7 +596,13 @@
           border-radius: 12px;
         }
         .day-header {
-          gap: 10px;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+          padding-bottom: 20px;
+        }
+        .day-header > div {
+          min-width: 0;
         }
         .day-title {
           display: block;
@@ -606,12 +612,22 @@
         }
         .day-title span {
           display: block;
-          margin-top: 4px;
+          margin-top: 6px;
           font-size: calc(11px * var(--font-scale));
+          line-height: 1.6;
+        }
+        .day-subtitle {
+          margin-top: 10px;
+          line-height: 1.8;
         }
         .weather-pill {
+          align-self: flex-start;
+          max-width: 100%;
           padding: 7px 9px;
           font-size: calc(10px * var(--font-scale));
+          line-height: 1.6;
+          white-space: normal;
+          overflow-wrap: anywhere;
         }
         .timeline {
           padding-left: 83px;
@@ -1130,7 +1146,7 @@
                 ><span class="event-dot"></span>
                 <div class="event-content">
                   <h4>大使館換錢</h4>
-                  <p>09:00 開始營業 · 約 12°</p>
+                  <p>09:00 開始營業 </p>
                 </div>
                 <button
                   class="check-button"
