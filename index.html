@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>首爾散步日記｜10.22 — 10.27</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f5ef;
+      --card: #fffefa;
+      --ink: #252b2a;
+      --muted: #777d78;
+      --line: #e8e5dc;
+      --green: #345d50;
+      --green-light: #e8efe9;
+      --coral: #c47761;
+      --yellow: #e4c678;
+      --shadow: 0 18px 55px rgba(48, 54, 47, .08);
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(228, 198, 120, .13), transparent 31rem),
+        var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    button { font: inherit; }
+    .page-shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--green); color: white; font-family: Georgia, serif; font-size: 16px; }
+    .top-note { color: var(--muted); font-size: 12px; letter-spacing: .08em; }
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      align-items: end;
+      gap: 40px;
+      padding: 68px 0 46px;
+      overflow: hidden;
+    }
+    .eyebrow { color: var(--coral); font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { margin: 14px 0 14px; font-family: Georgia, "Noto Serif TC", serif; font-size: clamp(42px, 7vw, 76px); font-weight: 500; letter-spacing: -.045em; line-height: 1.08; }
+    h1 span { color: var(--green); }
+    .hero-copy { max-width: 530px; color: var(--muted); font-size: 14px; line-height: 1.9; }
+    .hero-stamp {
+      justify-self: end;
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      border: 1px solid #d9d5c9;
+      border-radius: 50%;
+      color: var(--green);
+      transform: rotate(8deg);
+    }
+    .hero-stamp::before { content: ""; position: absolute; inset: 10px; border: 1px dashed #ccc6b6; border-radius: 50%; }
+    .stamp-small { font-size: 10px; letter-spacing: .25em; }
+    .stamp-date { margin: 8px 0; font-family: Georgia, serif; font-size: 42px; letter-spacing: -.07em; }
+    .stamp-caption { font-size: 12px; letter-spacing: .14em; }
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 4px 0 52px;
+    }
+    .overview-card { padding: 18px 20px; background: rgba(255, 254, 250, .7); border: 1px solid var(--line); border-radius: 12px; }
+    .overview-card span { display: block; margin-bottom: 9px; color: var(--muted); font-size: 11px; letter-spacing: .1em; }
+    .overview-card strong { font-size: 14px; font-weight: 650; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .section-heading h2 { margin: 0; font-family: Georgia, "Noto Serif TC", serif; font-size: 29px; font-weight: 500; }
+    .progress { color: var(--muted); font-size: 12px; }
+    .progress strong { color: var(--green); }
+    .day-tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; margin-bottom: 20px; }
+    .day-tab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 65px;
+      padding: 12px 16px;
+      text-align: left;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s, transform .2s;
+    }
+    .day-tab:hover { transform: translateY(-2px); border-color: #b7c7bb; }
+    .day-tab[aria-selected="true"] { color: var(--green); background: var(--green-light); border-color: #b8c9bc; }
+    .tab-date { font-family: Georgia, serif; font-size: 21px; }
+    .tab-label { font-size: 11px; }
+    .tab-weather { font-size: 11px; white-space: nowrap; }
+    .day-panel { padding: 28px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+    .day-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .day-title { display: flex; align-items: baseline; gap: 12px; }
+    .day-title h3 { margin: 0; font-family: Georgia, "Noto Serif TC", serif; font-size: 28px; font-weight: 500; }
+    .day-title span { color: var(--muted); font-size: 13px; }
+    .weather-pill { padding: 8px 12px; color: var(--green); background: var(--green-light); border-radius: 999px; font-size: 12px; white-space: nowrap; }
+    .day-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .timeline { position: relative; padding: 26px 0 0 112px; }
+    .timeline::before { content: ""; position: absolute; left: 91px; top: 34px; bottom: 25px; width: 1px; background: var(--line); }
+    .event { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 0 0 26px; }
+    .event:last-child { padding-bottom: 4px; }
+    .event-time { position: absolute; left: -112px; top: 2px; width: 77px; color: var(--green); font-family: Georgia, serif; font-size: 15px; text-align: right; }
+    .event-dot { position: absolute; left: -26px; top: 5px; width: 9px; height: 9px; border: 2px solid var(--green); border-radius: 50%; background: var(--card); }
+    .event-content h4 { margin: 0 0 7px; font-size: 15px; font-weight: 700; }
+    .event-content p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; white-space: pre-line; }
+    .event-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .tag { padding: 4px 8px; color: #6b6a5f; background: #f3f1e9; border-radius: 4px; font-size: 10px; }
+    .tag.accent { color: #985b4a; background: #f8ece7; }
+    .check-button {
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      color: transparent;
+      background: transparent;
+      border: 1px solid #d7d8cf;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .check-button:hover { border-color: var(--green); }
+    .event.is-done .check-button { color: white; background: var(--green); border-color: var(--green); }
+    .event.is-done .event-content h4 { color: #8b918a; text-decoration: line-through; }
+    .day-footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 25px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .day-footer strong { color: var(--ink); font-weight: 600; }
+    .footer { display: flex; justify-content: space-between; margin: 38px 0 28px; color: var(--muted); font-size: 11px; }
+    .footer-mark { color: var(--coral); font-size: 14px; }
+
+    @media (max-width: 700px) {
+      .page-shell { width: min(100% - 32px, 520px); }
+      .topbar { padding: 18px 0; }
+      .top-note { font-size: 10px; }
+      .hero { grid-template-columns: 1fr; gap: 24px; padding: 48px 0 30px; }
+      .hero-stamp { position: absolute; width: 116px; height: 116px; right: 0; top: 58px; opacity: .75; }
+      .hero-stamp::before { inset: 6px; }
+      .stamp-small { font-size: 7px; }
+      .stamp-date { margin: 4px 0; font-size: 24px; }
+      .stamp-caption { font-size: 8px; }
+      .hero-copy { max-width: 68%; font-size: 12px; }
+      .overview { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 38px; }
+      .overview-card { padding: 14px; }
+      .overview-card strong { font-size: 12px; }
+      .section-heading h2 { font-size: 25px; }
+      .day-tabs { grid-template-columns: repeat(2, 1fr); gap: 7px; margin-bottom: 12px; }
+      .day-tab { min-height: 56px; padding: 10px 12px; }
+      .day-panel { padding: 20px 16px; border-radius: 12px; }
+      .day-header { gap: 10px; }
+      .day-title { display: block; }
+      .day-title h3 { font-size: 24px; }
+      .day-title span { display: block; margin-top: 4px; font-size: 11px; }
+      .weather-pill { padding: 7px 9px; font-size: 10px; }
+      .timeline { padding-left: 83px; }
+      .timeline::before { left: 68px; }
+      .event-time { left: -83px; width: 55px; font-size: 12px; }
+      .event-dot { left: -19px; width: 8px; height: 8px; }
+      .event { gap: 10px; padding-bottom: 23px; }
+      .event-content h4 { font-size: 14px; }
+      .event-content p { font-size: 12px; }
+      .day-footer { flex-direction: column; gap: 7px; }
+      .footer { font-size: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">S</span> SEOUL NOTES</div>
+      <div class="top-note">一趟慢慢走、好好吃的旅行</div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow">AUTUMN TRAVEL · KOREA</div>
+          <h1 id="page-title">首爾<span>散步</span><br>日記</h1>
+          <p class="hero-copy">把機場交通、宮殿、街巷與市場，收進六天的秋日行程。打開每一天，邊走邊勾選，留一點時間給首爾的意外驚喜。</p>
+        </div>
+        <div class="hero-stamp" aria-label="10月22日至27日">
+          <span class="stamp-small">SEOUL, KOREA</span>
+          <span class="stamp-date">10.22<br>— 27</span>
+          <span class="stamp-caption">秋日小旅行</span>
+        </div>
+      </section>
+
+      <section class="overview" aria-label="旅程摘要">
+        <div class="overview-card"><span>TRIP DATES</span><strong>10 月 22 日 — 27 日</strong></div>
+        <div class="overview-card"><span>HOME BASE</span><strong>藍鴨飯店</strong></div>
+        <div class="overview-card"><span>HIGHLIGHT</span><strong>景福宮・南怡島・聖水</strong></div>
+        <div class="overview-card"><span>TRAVEL NOTE</span><strong>天氣多變，記得帶傘</strong></div>
+      </section>
+
+      <section aria-labelledby="itinerary-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">THE ITINERARY</div>
+            <h2 id="itinerary-title">每日行程</h2>
+          </div>
+          <div class="progress" aria-live="polite"><strong id="progress-count">0 / 0</strong> 項已完成</div>
+        </div>
+        <div class="day-tabs" role="tablist" aria-label="選擇日期">
+          <button class="day-tab" id="tab-22" role="tab" aria-selected="true" aria-controls="panel-22" data-day="22"><span><span class="tab-date">22</span> <span class="tab-label">四・抵達</span></span><span class="tab-weather">✈ 入境</span></button>
+          <button class="day-tab" id="tab-23" role="tab" aria-selected="false" aria-controls="panel-23" data-day="23" tabindex="-1"><span><span class="tab-date">23</span> <span class="tab-label">五・景福宮</span></span><span class="tab-weather">☁ 40%</span></button>
+          <button class="day-tab" id="tab-24" role="tab" aria-selected="false" aria-controls="panel-24" data-day="24" tabindex="-1"><span><span class="tab-date">24</span> <span class="tab-label">六・南怡島</span></span><span class="tab-weather">☀ 10%</span></button>
+          <button class="day-tab" id="tab-25" role="tab" aria-selected="false" aria-controls="panel-25" data-day="25" tabindex="-1"><span><span class="tab-date">25</span> <span class="tab-label">日・聖水弘大</span></span><span class="tab-weather">☂ 90%</span></button>
+          <button class="day-tab" id="tab-26" role="tab" aria-selected="false" aria-controls="panel-26" data-day="26" tabindex="-1"><span><span class="tab-date">26</span> <span class="tab-label">一・市區散策</span></span><span class="tab-weather">☂ 90%</span></button>
+          <button class="day-tab" id="tab-27" role="tab" aria-selected="false" aria-controls="panel-27" data-day="27" tabindex="-1"><span><span class="tab-date">27</span> <span class="tab-label">二・返程</span></span><span class="tab-weather">✈ 回家</span></button>
+        </div>
+
+        <article class="day-panel" id="panel-22" role="tabpanel" aria-labelledby="tab-22">
+          <div class="day-header"><div><div class="day-title"><h3>10 月 22 日</h3><span>星期四 · 出發與抵達</span></div><p class="day-subtitle">板橋 → 桃園機場T1 → 仁川機場 T2</p></div><div class="weather-pill">晚上約 10–11°</div></div>
+          <div class="timeline">
+            <div class="event" data-event="22-1200"><time class="event-time">12:00</time><span class="event-dot"></span><div class="event-content"><h4>板橋出發</h4><p>前往永寧站，轉搭 1962 客運。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-1220"><time class="event-time">12:20</time><span class="event-dot"></span><div class="event-content"><h4>永寧站搭乘 1962 客運</h4><p>前往桃園機場。</p><div class="event-meta"><span class="tag">客運</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-1300"><time class="event-time">13:00</time><span class="event-dot"></span><div class="event-content"><h4>抵達桃園機場</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-flight"><time class="event-time">15:30–19:05</time><span class="event-dot"></span><div class="event-content"><h4>桃園 T1 飛往仁川 T2</h4><p>班機抵達時間 19:05。</p><div class="event-meta"><span class="tag accent">桃園 T1 → 仁川 T2</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-ses"><time class="event-time">入境前</time><span class="event-dot"></span><div class="event-content"><h4>辦理 SES 快速通關</h4><p>完成註冊後可立即使用。仁川 T2 入境 A、B 廳均有註冊櫃檯；A 廳櫃檯 24 小時開放。</p><div class="event-meta"><span class="tag">入境前辦理</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-checkin"><time class="event-time">入境後</time><span class="event-dot"></span><div class="event-content"><h4>領取 CHECK IN SEOUL</h4><p>前往仁川 T2 B1F 的 CU 便利商店，尋找 CHECK IN SEOUL 服務機台。</p><div class="event-meta"><span class="tag">T2 · B1F · CU</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-bus-ticket"><time class="event-time">接著</time><span class="event-dot"></span><div class="event-content"><h4>購買機場巴士車票</h4><p>使用信用卡購票，搭乘 6002 機場巴士。</p><div class="event-meta"><span class="tag">信用卡</span><span class="tag accent">6002 巴士</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-bus"><time class="event-time">搭車</time><span class="event-dot"></span><div class="event-content"><h4>仁川 T2 前往鍾路六街</h4><p>乘車位置：T2 B1 交通中心 29 號月台。搭至「鍾路六街・東大門綜合市場」。</p><div class="event-meta"><span class="tag">T2 · B1 · 29 號月台</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-hotel"><time class="event-time">22:10</time><span class="event-dot"></span><div class="event-content"><h4>藍鴨飯店 Check-in</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="22-dinner"><time class="event-time">晚餐</time><span class="event-dot"></span><div class="event-content"><h4>視情況吃晚餐</h4><p>橋村炸雞東大門 1 號店（步行 13 分鐘）<br>陳玉華一隻雞（步行 6 分鐘，23:30 最後點餐、營業至 01:00，可刷卡；必點麵與馬鈴薯）<br>或超商 pasta。</p><div class="event-meta"><span class="tag">彈性安排</span><span class="tag accent">陳玉華一隻雞必點麵、馬鈴薯</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日提醒</strong> 晚上約 10–11°，先辦 SES、領 CHECK IN SEOUL，再搭 6002</span><span>T2 B1 交通中心 29 號月台</span></div>
+        </article>
+
+        <article class="day-panel" id="panel-23" role="tabpanel" aria-labelledby="tab-23" hidden>
+          <div class="day-header">
+            <div>
+              <div class="day-title"><h3>10 月 23 日</h3><span>星期五 · 宮殿與夜景</span></div>
+              <p class="day-subtitle">鍾路六街 → 景福宮 → 解放村 → 明洞</p>
+            </div>
+            <div class="weather-pill">☁ 降雨機率 40% · 10–19°</div>
+          </div>
+          <div class="timeline">
+            <div class="event" data-event="23-0730"><time class="event-time">07:30</time><span class="event-dot"></span><div class="event-content"><h4>從藍鴨飯店出發</h4><p>步行 3 分鐘<br>搭 262 到樂天百貨站，步行 8 分鐘刷 check in seoul 152 到乙支路 2 街，步行 7 分鐘。</p><div class="event-meta"><span class="tag">交通卡</span><span class="tag">約 10°</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-0800"><time class="event-time">08:00–08:50</time><span class="event-dot"></span><div class="event-content"><h4>保承會館早午餐</h4><p>馬鈴薯排骨湯、豬肉湯飯</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-0900"><time class="event-time">09:00–09:20</time><span class="event-dot"></span><div class="event-content"><h4>大使館換錢</h4><p>09:00 開始營業 · 約 12°</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-711"><time class="event-time">接著</time><span class="event-dot"></span><div class="event-content"><h4>711 明洞站店儲值</h4><p>CHECK IN SEOUL 儲值 22,000 韓元，約新台幣 512 元。搭地鐵：明洞 → 忠武路 → 景福宮站，約 20 分鐘。</p><div class="event-meta"><span class="tag">約 20 分鐘</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-0950"><time class="event-time">09:50</time><span class="event-dot"></span><div class="event-content"><h4>西花韓服</h4><p>租借 6 小時，預約 10:30（原筆記另記 09:50 抵達）。</p><div class="event-meta"><span class="tag accent">韓服預約</span><span class="tag">約 14°</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1030"><time class="event-time">10:30–11:30</time><span class="event-dot"></span><div class="event-content"><h4>換穿韓服</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1130"><time class="event-time">11:30–13:30</time><span class="event-dot"></span><div class="event-content"><h4>景福宮拍照</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1400"><time class="event-time">14:00</time><span class="event-dot"></span><div class="event-content"><h4>歸還韓服</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1430"><time class="event-time">14:30–16:00</time><span class="event-dot"></span><div class="event-content"><h4>孔陵一隻雞午餐</h4><p>必點粥，之後到藍鴨飯店咖啡。</p><div class="event-meta"><span class="tag">必點：粥</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1630"><time class="event-time">16:30</time><span class="event-dot"></span><div class="event-content"><h4>出發前往解放村</h4><p>搭計程車約 25 分鐘。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1700"><time class="event-time">17:00–19:00</time><span class="event-dot"></span><div class="event-content"><h4>解放村日落與夜景</h4><p>Villa Coffee Bar：咖啡、啤酒、洋甘菊茶、巴斯克蛋糕。</p><div class="event-meta"><span class="tag">19–17°</span><span class="tag accent">日落夜景</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-1910"><time class="event-time">19:10–21:00</time><span class="event-dot"></span><div class="event-content"><h4>明洞夜市晚餐、逛街</h4><p>從解放村搭計程車約 10 分鐘。晚餐：BHC 炸雞明洞本店、其他小吃。</p><div class="event-meta"><span class="tag">17–16°</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="23-home"><time class="event-time">回程</time><span class="event-dot"></span><div class="event-content"><h4>回飯店</h4><p>搭公車或地鐵，約 20 分鐘。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日路線</strong> 鍾路六街 → 景福宮 → 解放村 → 明洞</span><span>10 月 22 日晚間約 10–11°</span></div>
+        </article>
+
+        <article class="day-panel" id="panel-24" role="tabpanel" aria-labelledby="tab-24" hidden>
+          <div class="day-header"><div><div class="day-title"><h3>10 月 24 日</h3><span>星期六 · 南怡島一日遊</span></div><p class="day-subtitle">小法國村 → 春川辣炒雞 → 南怡島 → 弘大</p></div><div class="weather-pill">☀ 降雨機率 10% · 13–20°</div></div>
+          <div class="timeline">
+            <div class="event" data-event="24-bus"><time class="event-time">出發</time><span class="event-dot"></span><div class="event-content"><h4>鍾路六街前往東大門</h4><p>搭 7212 到東大門歷史文化公園 8 號出口。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-0900"><time class="event-time">09:00</time><span class="event-dot"></span><div class="event-content"><h4>集合等車</h4><p>東大門歷史文化公園站對面 Designer Hotel。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-0930"><time class="event-time">09:30</time><span class="event-dot"></span><div class="event-content"><h4>發車</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-1030"><time class="event-time">10:30–11:15</time><span class="event-dot"></span><div class="event-content"><h4>小法國村</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-1115"><time class="event-time">11:15–12:45</time><span class="event-dot"></span><div class="event-content"><h4>午餐・春川辣炒雞</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-1300"><time class="event-time">13:00–15:00</time><span class="event-dot"></span><div class="event-content"><h4>南怡島</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-1730"><time class="event-time">17:30</time><span class="event-dot"></span><div class="event-content"><h4>弘大解散・晚餐自由選</h4><p>水芹烤肉 Musso 弘大店<br>荒謬的生肉弘大店 · 豚壽百 · 李太祖馬鈴薯排骨湯</p><div class="event-meta"><span class="tag">弘大逛街</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="24-home"><time class="event-time">回程</time><span class="event-dot"></span><div class="event-content"><h4>弘大回飯店</h4><p>地鐵弘大 → 鍾路五街。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日重點</strong> 南怡島、小法國村</span><span>別忘了確認集合地點與車班</span></div>
+        </article>
+
+        <article class="day-panel" id="panel-25" role="tabpanel" aria-labelledby="tab-25" hidden>
+          <div class="day-header"><div><div class="day-title"><h3>10 月 25 日</h3><span>星期日 · 聖水與弘大</span></div><p class="day-subtitle">鍾路 → 聖水洞 → 弘大 → 鍾路五街</p></div><div class="weather-pill">☂ 降雨機率 90% · 13–20°</div></div>
+          <div class="timeline">
+            <div class="event" data-event="25-0900"><time class="event-time">09:00</time><span class="event-dot"></span><div class="event-content"><h4>出門前往聖水</h4><p>地鐵到東大門站步行 8 分鐘，搭 4 號線至東大門歷史文化公園站，轉 2 號線至聖水站，再步行 5 分鐘。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-0930"><time class="event-time">09:30–10:10</time><span class="event-dot"></span><div class="event-content"><h4>早餐・陵洞水芹菜</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1015"><time class="event-time">10:15</time><span class="event-dot"></span><div class="event-content"><h4>無垢屋抽號碼牌</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1030"><time class="event-time">10:30–11:30</time><span class="event-dot"></span><div class="event-content"><h4>聖水洞逛街</h4><p>Loe 香水（11:00 開） · Musinsa Standard Seongsu（11:00 開）<br>Nyu Nyu（10:00 開） · M playground（10:00 開）</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1200"><time class="event-time">12:00–13:00</time><span class="event-dot"></span><div class="event-content"><h4>午餐・無垢屋</h4><p>13:00–15:00 繼續逛街。咖啡廳備選：Standard Bread、Cafe Onion。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1500"><time class="event-time">15:00</time><span class="event-dot"></span><div class="event-content"><h4>搭 2 號線前往弘大</h4><p>聖水 → 弘益大學，約 27 分鐘。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1530"><time class="event-time">15:30–16:30</time><span class="event-dot"></span><div class="event-content"><h4>弘大逛街</h4><p>Olive Young · Blue Elephant · Lee<br>TROUBADOUR 弘大店（平價服飾）· Another Awesome（平價服飾）</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-1630"><time class="event-time">16:30</time><span class="event-dot"></span><div class="event-content"><h4>晚餐・喉嚨水芹菜烤肉</h4><p>預留排隊時間，之後在弘大逛逛。</p><div class="event-meta"><span class="tag accent">可能需排隊</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="25-home"><time class="event-time">回程</time><span class="event-dot"></span><div class="event-content"><h4>回飯店休息</h4><p>地鐵弘大 → 鍾路五街。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日提醒</strong> 降雨機率高，記得帶傘</span><span>聖水洞 → 弘大</span></div>
+        </article>
+
+        <article class="day-panel" id="panel-26" role="tabpanel" aria-labelledby="tab-26" hidden>
+          <div class="day-header"><div><div class="day-title"><h3>10 月 26 日</h3><span>星期一 · 市場與最後採買</span></div><p class="day-subtitle">明洞 → 首爾站樂天超市 → 廣藏市場</p></div><div class="weather-pill">☂ 降雨機率 90% · 15–18°</div></div>
+          <div class="timeline">
+            <div class="event" data-event="26-1000"><time class="event-time">10:00–14:00</time><span class="event-dot"></span><div class="event-content"><h4>明洞逛街・首爾站樂天超市</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="26-1500"><time class="event-time">15:00–17:00</time><span class="event-dot"></span><div class="event-content"><h4>廣藏市場</h4><p>Garlic Boy 蒜頭麵包 · 綠豆煎餅<br>買棉被 · Kodak 衣服</p><div class="event-meta"><span class="tag">記得留意行李空間</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="26-evening"><time class="event-time">晚上</time><span class="event-dot"></span><div class="event-content"><h4>視情況安排夜景</h4><p>龍馬山天空步道，或南山公園（如果第一天沒去）。</p><div class="event-meta"><span class="tag">彈性行程</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日提醒</strong> 降雨機率高，採買留意行李重量</span><span>行程可依體力彈性調整</span></div>
+        </article>
+        <article class="day-panel" id="panel-27" role="tabpanel" aria-labelledby="tab-27" hidden>
+          <div class="day-header"><div><div class="day-title"><h3>10 月 27 日</h3><span>星期二 · 返程日</span></div><p class="day-subtitle">飯店 → 仁川機場 T2 → 桃園 T1 → 土城</p></div><div class="weather-pill">返程日 · 預留機場時間</div></div>
+          <div class="timeline">
+            <div class="event" data-event="27-0740"><time class="event-time">07:40</time><span class="event-dot"></span><div class="event-content"><h4>退房</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="27-0800"><time class="event-time">08:00</time><span class="event-dot"></span><div class="event-content"><h4>喝飯店咖啡</h4></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="27-0830"><time class="event-time">08:30</time><span class="event-dot"></span><div class="event-content"><h4>出發前往機場</h4><p>搭乘 6002 機場巴士，票價 17,000 韓元。記得事先線上儲值至少 17,000 韓元。</p><div class="event-meta"><span class="tag accent">6002 巴士</span><span class="tag">17,000 韓元</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="27-1000"><time class="event-time">10:00</time><span class="event-dot"></span><div class="event-content"><h4>抵達仁川機場</h4><p>前往仁川 T2 辦理登機手續。</p></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+            <div class="event" data-event="27-flight"><time class="event-time">12:30–14:20</time><span class="event-dot"></span><div class="event-content"><h4>仁川 T2 飛往桃園 T1</h4><p>抵達桃園後，搭機場接送回土城。</p><div class="event-meta"><span class="tag accent">仁川 T2 → 桃園 T1</span></div></div><button class="check-button" aria-label="標記已完成" title="標記已完成">✓</button></div>
+          </div>
+          <div class="day-footer"><span><strong>今日提醒</strong> 6002 車資記得線上儲值 17,000 韓元</span><span>桃園機場接送回土城</span></div>
+        </article>
+      </section>
+    </main>
+    <footer class="footer"><span>SEOUL NOTES · 10.22 — 10.27</span><span class="footer-mark">천천히, 잘 먹고 잘 걷기</span></footer>
+  </div>
+  <script>
+    (() => {
+      const tabs = [...document.querySelectorAll(".day-tab")];
+      const panels = [...document.querySelectorAll(".day-panel")];
+      const storageKey = "seoul-itinerary-checks-v1";
+      let completed = new Set();
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        if (Array.isArray(saved)) completed = new Set(saved.filter(value => typeof value === "string"));
+      } catch (error) {
+        console.warn("Unable to load saved itinerary progress.", error);
+      }
+
+      function updateProgress() {
+        const events = [...document.querySelectorAll(".event")];
+        document.getElementById("progress-count").textContent =
+          `${events.filter(event => completed.has(event.dataset.event)).length} / ${events.length}`;
+      }
+
+      function showDay(day) {
+        tabs.forEach(tab => {
+          const active = tab.dataset.day === day;
+          tab.setAttribute("aria-selected", String(active));
+          tab.tabIndex = active ? 0 : -1;
+        });
+        panels.forEach(panel => {
+          panel.hidden = panel.id !== `panel-${day}`;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => showDay(tab.dataset.day));
+        tab.addEventListener("keydown", event => {
+          if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          const next = tabs[(index + direction + tabs.length) % tabs.length];
+          next.focus();
+          showDay(next.dataset.day);
+        });
+      });
+
+      document.querySelectorAll(".event").forEach(event => {
+        const key = event.dataset.event;
+        const button = event.querySelector(".check-button");
+        const setDone = done => {
+          event.classList.toggle("is-done", done);
+          button.setAttribute("aria-pressed", String(done));
+          button.setAttribute("aria-label", done ? "取消完成標記" : "標記已完成");
+        };
+        setDone(completed.has(key));
+        button.addEventListener("click", () => {
+          if (completed.has(key)) completed.delete(key);
+          else completed.add(key);
+          setDone(completed.has(key));
+          try {
+            localStorage.setItem(storageKey, JSON.stringify([...completed]));
+          } catch (error) {
+            console.warn("Unable to save itinerary progress.", error);
+          }
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
