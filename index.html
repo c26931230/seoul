@@ -228,9 +228,22 @@
         background: var(--green-light);
         border-color: #b8c9bc;
       }
+      .day-tab > span:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .tab-date-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
       .tab-date {
         font-family: Georgia, serif;
         font-size: calc(21px * var(--font-scale));
+      }
+      .tab-weekday {
+        font-size: calc(11px * var(--font-scale));
       }
       .tab-label {
         font-size: calc(11px * var(--font-scale));
@@ -397,7 +410,7 @@
         overflow: hidden;
         color: var(--muted);
         background: #f8f7f2;
-        border: 1px dashed #c9c7bb;
+        /* border: 1px dashed #c9c7bb; */
         border-radius: 9px;
         font-size: calc(12px * var(--font-scale));
         letter-spacing: 0.08em;
@@ -790,8 +803,10 @@
               data-day="22"
             >
               <span
-                ><span class="tab-date">22</span>
-                <span class="tab-label">四・抵達</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">22</span>
+                  <span class="tab-weekday">四</span></span
+                ><span class="tab-label">抵達</span></span
               ><span class="tab-weather">✈ 入境</span>
             </button>
             <button
@@ -804,8 +819,10 @@
               tabindex="-1"
             >
               <span
-                ><span class="tab-date">23</span>
-                <span class="tab-label">五・景福宮</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">23</span>
+                  <span class="tab-weekday">五</span></span
+                ><span class="tab-label">景福宮</span></span
               ><span class="tab-weather">☁ 40%</span>
             </button>
             <button
@@ -818,8 +835,10 @@
               tabindex="-1"
             >
               <span
-                ><span class="tab-date">24</span>
-                <span class="tab-label">六・南怡島</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">24</span>
+                  <span class="tab-weekday">六</span></span
+                ><span class="tab-label">南怡島</span></span
               ><span class="tab-weather">☀ 10%</span>
             </button>
             <button
@@ -832,8 +851,10 @@
               tabindex="-1"
             >
               <span
-                ><span class="tab-date">25</span>
-                <span class="tab-label">日・聖水弘大</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">25</span>
+                  <span class="tab-weekday">日</span></span
+                ><span class="tab-label">聖水弘大</span></span
               ><span class="tab-weather">☂ 90%</span>
             </button>
             <button
@@ -846,8 +867,10 @@
               tabindex="-1"
             >
               <span
-                ><span class="tab-date">26</span>
-                <span class="tab-label">一・市區散策</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">26</span>
+                  <span class="tab-weekday">一</span></span
+                ><span class="tab-label">市區散策</span></span
               ><span class="tab-weather">☂ 90%</span>
             </button>
             <button
@@ -860,8 +883,10 @@
               tabindex="-1"
             >
               <span
-                ><span class="tab-date">27</span>
-                <span class="tab-label">二・返程</span></span
+                ><span class="tab-date-row"
+                  ><span class="tab-date">27</span>
+                  <span class="tab-weekday">二</span></span
+                ><span class="tab-label">返程</span></span
               ><span class="tab-weather">✈ 回家</span>
             </button>
           </div>
