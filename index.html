@@ -8,7 +8,7 @@
     <style>
       :root {
         color-scheme: light;
-        --font-scale: 1;
+        --font-scale: 1.25;
         --paper: #f7f5ef;
         --card: #fffefa;
         --ink: #252b2a;
@@ -200,6 +200,9 @@
         gap: 9px;
         margin-bottom: 20px;
       }
+      .day-tabs[hidden] {
+        display: none;
+      }
       .day-tab {
         display: flex;
         align-items: center;
@@ -253,6 +256,7 @@
         white-space: nowrap;
       }
       .day-panel {
+        scroll-margin-top: 16px;
         padding: 28px;
         background: var(--card);
         border: 1px solid var(--line);
@@ -494,7 +498,8 @@
         color: var(--coral);
         font-size: calc(14px * var(--font-scale));
       }
-      .back-to-top {
+      .back-to-top,
+      .map-toggle {
         position: fixed;
         right: 24px;
         bottom: 24px;
@@ -513,10 +518,23 @@
         line-height: 1;
         text-decoration: none;
       }
-      .back-to-top:hover {
+      .map-toggle {
+        bottom: 84px;
+        cursor: pointer;
+      }
+      .map-toggle svg {
+        width: 24px;
+        height: 24px;
+      }
+      .map-toggle svg[hidden] {
+        display: none;
+      }
+      .back-to-top:hover,
+      .map-toggle:hover {
         background: #284a3f;
       }
-      .back-to-top:focus-visible {
+      .back-to-top:focus-visible,
+      .map-toggle:focus-visible {
         outline: 2px solid var(--coral);
         outline-offset: 3px;
       }
@@ -553,6 +571,18 @@
         display: flex;
         align-items: center;
         gap: 18px;
+      }
+      .map-section {
+        scroll-margin-top: 16px;
+      }
+      .map-frame {
+        display: block;
+        width: 100%;
+        height: min(65vh, 640px);
+        min-height: 360px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
       }
 
       @media (max-width: 700px) {
@@ -625,6 +655,10 @@
         }
         .day-panel {
           padding: 20px 16px;
+          border-radius: 12px;
+        }
+        .map-frame {
+          min-height: 420px;
           border-radius: 12px;
         }
         .day-header {
@@ -705,6 +739,10 @@
           right: 16px;
           bottom: 16px;
         }
+        .map-toggle {
+          right: 16px;
+          bottom: 76px;
+        }
       }
       @media (prefers-reduced-motion: reduce) {
         *,
@@ -756,15 +794,20 @@
 
         <section aria-labelledby="itinerary-title">
           <div class="section-heading">
-            <div>
-              <div class="eyebrow">THE ITINERARY</div>
+            <div id="itinerary-heading">
+              <div class="eyebrow" id="view-eyebrow">THE ITINERARY</div>
               <h2 id="itinerary-title">每日行程</h2>
             </div>
             <div class="itinerary-tools">
-              <div class="progress" aria-live="polite">
+              <div class="progress" id="progress-tools" aria-live="polite">
                 <strong id="progress-count">0 / 0</strong> 項已完成
               </div>
-              <div class="font-controls" role="group" aria-label="字體大小">
+              <div
+                class="font-controls"
+                id="font-tools"
+                role="group"
+                aria-label="字體大小"
+              >
                 <span class="font-controls-label">字體</span>
                 <button
                   class="font-control"
@@ -773,14 +816,6 @@
                   aria-pressed="true"
                 >
                   小
-                </button>
-                <button
-                  class="font-control"
-                  type="button"
-                  data-font-size="medium"
-                  aria-pressed="false"
-                >
-                  中
                 </button>
                 <button
                   class="font-control"
@@ -1055,7 +1090,15 @@
                 <time class="event-time">22:10</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/GT4JUxES" target="_blank" rel="noopener noreferrer" title="在新分頁開啟藍鴨飯店地圖">藍鴨飯店 Check-in</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/GT4JUxES"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟藍鴨飯店地圖"
+                      >藍鴨飯店 Check-in</a
+                    >
+                  </h4>
                   <div class="food-photo-slot">
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gO6SYfEQz9k33eosWgUXSfdgWHjDWbyBxhXFnvTnZWDNf4pBQgp1kwIb&s=10"
@@ -1077,12 +1120,35 @@
                 <div class="event-content">
                   <h4>視情況吃晚餐</h4>
                   <ul>
-                    <li><a href="https://naver.me/xXnv8RIt" target="_blank" rel="noopener noreferrer" title="在新分頁開啟橋村炸雞地圖">橋村炸雞東大門 1 號店</a>（步行 13 分鐘）</li>
                     <li>
-                      <a href="https://naver.me/xXnv8RJn" target="_blank" rel="noopener noreferrer" title="在新分頁開啟陳玉華一隻雞地圖">陳玉華一隻雞</a>（步行6 分鐘，23:30 最後點餐、營業至
+                      <a
+                        href="https://naver.me/xXnv8RIt"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟橋村炸雞地圖"
+                        >橋村炸雞東大門 1 號店</a
+                      >（步行 13 分鐘）
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/xXnv8RJn"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟陳玉華一隻雞地圖"
+                        >陳玉華一隻雞</a
+                      >（步行6 分鐘，23:30 最後點餐、營業至
                       01:00，可刷卡；必點麵與馬鈴薯）
                     </li>
-                    <li>超商 pasta <a href="https://naver.me/5IfvIyKD" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 CU 鐘路陽光店地圖">CU 鐘路陽光店</a></li>
+                    <li>
+                      超商 pasta
+                      <a
+                        href="https://naver.me/5IfvIyKD"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 CU 鐘路陽光店地圖"
+                        >CU 鐘路陽光店</a
+                      >
+                    </li>
                   </ul>
                   <div class="event-meta">
                     <span class="tag">彈性安排</span
@@ -1094,14 +1160,30 @@
                         src="https://hips.hearstapps.com/hmg-prod/images/res-20230111673578909.jpeg?crop=1.00xw:0.969xh;0,0"
                         alt="橋村炸雞"
                       />
-                      <figcaption><a href="https://naver.me/xXnv8RIt" target="_blank" rel="noopener noreferrer" title="在新分頁開啟橋村炸雞地圖">橋村炸雞</a></figcaption>
+                      <figcaption>
+                        <a
+                          href="https://naver.me/xXnv8RIt"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="在新分頁開啟橋村炸雞地圖"
+                          >橋村炸雞</a
+                        >
+                      </figcaption>
                     </figure>
                     <figure class="food-photo-card">
                       <img
                         src="https://alinalife.tw/wp-content/uploads/2019/01/DSCF4219.jpg"
                         alt="陳玉華一隻雞"
                       />
-                      <figcaption><a href="https://naver.me/xXnv8RJn" target="_blank" rel="noopener noreferrer" title="在新分頁開啟陳玉華一隻雞地圖">陳玉華一隻雞</a></figcaption>
+                      <figcaption>
+                        <a
+                          href="https://naver.me/xXnv8RJn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="在新分頁開啟陳玉華一隻雞地圖"
+                          >陳玉華一隻雞</a
+                        >
+                      </figcaption>
                     </figure>
                     <figure class="food-photo-card">
                       <img
@@ -1153,7 +1235,8 @@
                 <div class="event-content">
                   <h4>從藍鴨飯店出發</h4>
                   <p>
-                    步行 3 分鐘<br />搭 262 到樂天百貨站，步行 8 分鐘刷 check in seoul 152 到乙支路 2 街，步行 7 分鐘。
+                    步行 3 分鐘<br />搭 262 到樂天百貨站，步行 8 分鐘刷 check in
+                    seoul 152 到乙支路 2 街，步行 7 分鐘。
                   </p>
                   <div class="event-meta">
                     <span class="tag">交通卡</span
@@ -1172,7 +1255,15 @@
                 <time class="event-time">08:00–08:50</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/xD8D7Pix" target="_blank" rel="noopener noreferrer" title="在新分頁開啟保承會館地圖">保承會館早午餐</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/xD8D7Pix"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟保承會館地圖"
+                      >保承會館早午餐</a
+                    >
+                  </h4>
                   <p>馬鈴薯排骨湯、豬肉湯飯</p>
                   <div
                     class="food-photo-slot"
@@ -1197,8 +1288,16 @@
                 <time class="event-time">09:00–09:20</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/G8f4BPz9" target="_blank" rel="noopener noreferrer" title="在新分頁開啟大使館地圖">大使館換錢</a></h4>
-                  <p>09:00 開始營業 </p>
+                  <h4>
+                    <a
+                      href="https://naver.me/G8f4BPz9"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟大使館地圖"
+                      >大使館換錢</a
+                    >
+                  </h4>
+                  <p>09:00 開始營業</p>
                 </div>
                 <button
                   class="check-button"
@@ -1212,10 +1311,18 @@
                 <time class="event-time">接著</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/x9VSwNqB" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 7-Eleven 明洞站店地圖">711 明洞站店儲值</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/x9VSwNqB"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟 7-Eleven 明洞站店地圖"
+                      >711 明洞站店儲值</a
+                    >
+                  </h4>
                   <p>
                     CHECK IN SEOUL 儲值 22,000 韓元，約新台幣 512元。
-                    <br>搭地鐵：明洞 → 忠武路 → 景福宮站，約 20 分鐘。
+                    <br />搭地鐵：明洞 → 忠武路 → 景福宮站，約 20 分鐘。
                   </p>
                   <div class="event-meta">
                     <span class="tag">約 20 分鐘</span>
@@ -1233,7 +1340,15 @@
                 <time class="event-time">09:50</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/5EC1VSOj" target="_blank" rel="noopener noreferrer" title="在新分頁開啟西花韓服地圖">西花韓服</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/5EC1VSOj"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟西花韓服地圖"
+                      >西花韓服</a
+                    >
+                  </h4>
                   <p>租借 6 小時，預約 10:30。</p>
                   <div class="event-meta">
                     <span class="tag accent">韓服預約</span
@@ -1264,7 +1379,15 @@
                 <time class="event-time">11:30–13:30</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/5HyRMbR8" target="_blank" rel="noopener noreferrer" title="在新分頁開啟景福宮地圖">景福宮拍照</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/5HyRMbR8"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟景福宮地圖"
+                      >景福宮拍照</a
+                    >
+                  </h4>
                   <div class="food-photo-slot">
                     <img
                       src="https://www.bring-you.info/imgs/2018/12/gyeongbokgung-palace-9-900x600.jpg"
@@ -1296,7 +1419,15 @@
                 <time class="event-time">14:30–16:00</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/5XcEFt2m" target="_blank" rel="noopener noreferrer" title="在新分頁開啟孔陵一隻雞地圖">孔陵一隻雞午餐</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/5XcEFt2m"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟孔陵一隻雞地圖"
+                      >孔陵一隻雞午餐</a
+                    >
+                  </h4>
                   <p>必點粥，之後到藍鴨飯店咖啡。</p>
                   <div class="event-meta">
                     <span class="tag">必點：粥</span>
@@ -1339,7 +1470,15 @@
                 <time class="event-time">17:00–19:00</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/xllPFPGY" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Villa 咖啡吧地圖">解放村日落與夜景</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/xllPFPGY"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟 Villa 咖啡吧地圖"
+                      >解放村日落與夜景</a
+                    >
+                  </h4>
                   <p>Villa Coffee Bar：咖啡、啤酒、洋甘菊茶、巴斯克蛋糕。</p>
                   <div class="event-meta">
                     <span class="tag">19–17°</span
@@ -1368,17 +1507,61 @@
                 <time class="event-time">19:10–21:00</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/Ix0zZODu" target="_blank" rel="noopener noreferrer" title="在新分頁開啟明洞夜市地圖">明洞夜市晚餐、逛街</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/Ix0zZODu"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟明洞夜市地圖"
+                      >明洞夜市晚餐、逛街</a
+                    >
+                  </h4>
                   <p>
                     從解放村搭計程車約 10 分鐘。晚餐：BHC
                     炸雞明洞本店、其他小吃。
                   </p>
                   <ul>
-                    <li><a href="https://naver.me/xnOZuR5w" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Loe 明洞店地圖">Loe香水</a> 11:00 </li>
-                    <li>Lee 11:00 </li>
-                    <li><a href="https://naver.me/FkaZy2qE" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 M Play Ground 明洞店地圖">M play ground</a> 10:00 </li>
-                    <li><a href="https://naver.me/IGsDnxBj" target="_blank" rel="noopener noreferrer" title="在新分頁開啟大創明洞店地圖">Daiso</a> 10:00 </li>
-                    <li><a href="https://naver.me/GCJwBeLZ" target="_blank" rel="noopener noreferrer" title="在新分頁開啟北臉地圖">北臉</a> 10:00 </li>
+                    <li>
+                      <a
+                        href="https://naver.me/xnOZuR5w"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Loe 明洞店地圖"
+                        >Loe香水</a
+                      >
+                      11:00
+                    </li>
+                    <li>Lee 11:00</li>
+                    <li>
+                      <a
+                        href="https://naver.me/FkaZy2qE"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 M Play Ground 明洞店地圖"
+                        >M play ground</a
+                      >
+                      10:00
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/IGsDnxBj"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟大創明洞店地圖"
+                        >Daiso</a
+                      >
+                      10:00
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/GCJwBeLZ"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟北臉地圖"
+                        >北臉</a
+                      >
+                      10:00
+                    </li>
                   </ul>
                   <div class="event-meta"><span class="tag">17–16°</span></div>
                   <div
@@ -1556,10 +1739,42 @@
                 <div class="event-content">
                   <h4>弘大解散・晚餐自由選</h4>
                   <ul>
-                    <li><a href="https://naver.me/52aNoHVo" target="_blank" rel="noopener noreferrer" title="在新分頁開啟水芹烤肉 Musso 弘大店地圖">水芹烤肉 Musso 弘大店</a></li>
-                    <li><a href="https://naver.me/G0pLkvXF" target="_blank" rel="noopener noreferrer" title="在新分頁開啟荒謬的生肉弘大店地圖">荒謬的生肉弘大店</a></li>
-                    <li><a href="https://naver.me/GDQup6xr" target="_blank" rel="noopener noreferrer" title="在新分頁開啟豚壽百地圖">豚壽百</a></li>
-                    <li><a href="https://naver.me/GWWYnDzE" target="_blank" rel="noopener noreferrer" title="在新分頁開啟李太祖地圖">李太祖馬鈴薯排骨湯</a></li>
+                    <li>
+                      <a
+                        href="https://naver.me/52aNoHVo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟水芹烤肉 Musso 弘大店地圖"
+                        >水芹烤肉 Musso 弘大店</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/G0pLkvXF"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟荒謬的生肉弘大店地圖"
+                        >荒謬的生肉弘大店</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/GDQup6xr"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟豚壽百地圖"
+                        >豚壽百</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/GWWYnDzE"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟李太祖地圖"
+                        >李太祖馬鈴薯排骨湯</a
+                      >
+                    </li>
                   </ul>
                   <div class="event-meta">
                     <span class="tag">弘大逛街</span>
@@ -1570,21 +1785,45 @@
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHDGxGtUuy0NP2ND9jPvr4Xr26R5pcC0kMtm43ijwBXAh-BTXEIH2iv-4j&s=10"
                         alt="荒謬的生肉"
                       />
-                      <figcaption><a href="https://naver.me/G0pLkvXF" target="_blank" rel="noopener noreferrer" title="在新分頁開啟荒謬的生肉弘大店地圖">荒謬的生肉</a></figcaption>
+                      <figcaption>
+                        <a
+                          href="https://naver.me/G0pLkvXF"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="在新分頁開啟荒謬的生肉弘大店地圖"
+                          >荒謬的生肉</a
+                        >
+                      </figcaption>
                     </figure>
                     <figure class="food-photo-card">
                       <img
                         src="https://www.hanchao.com/varimg/photogallery/Article_Photo/13249/big_235098.jpg"
                         alt="豚壽百"
                       />
-                      <figcaption><a href="https://naver.me/GDQup6xr" target="_blank" rel="noopener noreferrer" title="在新分頁開啟豚壽百地圖">豚壽百</a></figcaption>
+                      <figcaption>
+                        <a
+                          href="https://naver.me/GDQup6xr"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="在新分頁開啟豚壽百地圖"
+                          >豚壽百</a
+                        >
+                      </figcaption>
                     </figure>
                     <figure class="food-photo-card">
                       <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScpeb5j9S_wZ0YsV5P-QJgxKemHZfffnw-Lyr1b_0wYqaALSkVEny1p0I&s=10"
                         alt="李太祖脊骨土豆湯"
                       />
-                      <figcaption><a href="https://naver.me/GWWYnDzE" target="_blank" rel="noopener noreferrer" title="在新分頁開啟李太祖地圖">李太祖脊骨土豆湯</a></figcaption>
+                      <figcaption>
+                        <a
+                          href="https://naver.me/GWWYnDzE"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="在新分頁開啟李太祖地圖"
+                          >李太祖脊骨土豆湯</a
+                        >
+                      </figcaption>
                     </figure>
                   </div>
                 </div>
@@ -1641,7 +1880,11 @@
                 ><span class="event-dot"></span>
                 <div class="event-content">
                   <h4>出門前往聖水</h4>
-                  <p>地鐵到東大門站步行 8 分鐘，搭 4號線至東大門歷史文化公園站，轉 2 號線至聖水站，再步行 5分鐘。</p>
+                  <p>
+                    地鐵到東大門站步行 8 分鐘，搭
+                    4號線至東大門歷史文化公園站，轉 2 號線至聖水站，再步行
+                    5分鐘。
+                  </p>
                 </div>
                 <button
                   class="check-button"
@@ -1655,7 +1898,15 @@
                 <time class="event-time">09:30–10:10</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/FXnJqQlT" target="_blank" rel="noopener noreferrer" title="在新分頁開啟陵洞水芹菜地圖">早餐・陵洞水芹菜</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/FXnJqQlT"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟陵洞水芹菜地圖"
+                      >早餐・陵洞水芹菜</a
+                    >
+                  </h4>
                   <div
                     class="food-photo-slot"
                     role="img"
@@ -1678,7 +1929,17 @@
               <div class="event" data-event="25-1015">
                 <time class="event-time">10:15</time
                 ><span class="event-dot"></span>
-                <div class="event-content"><h4><a href="https://naver.me/x525wi7B" target="_blank" rel="noopener noreferrer" title="在新分頁開啟無垢屋地圖">無垢屋抽號碼牌</a></h4></div>
+                <div class="event-content">
+                  <h4>
+                    <a
+                      href="https://naver.me/x525wi7B"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟無垢屋地圖"
+                      >無垢屋抽號碼牌</a
+                    >
+                  </h4>
+                </div>
                 <button
                   class="check-button"
                   aria-label="標記已完成"
@@ -1693,10 +1954,42 @@
                 <div class="event-content">
                   <h4>聖水洞逛街</h4>
                   <ul>
-                    <li><a href="https://naver.me/GHLF7adQ" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Loe 聖水店地圖">Loe 香水</a>（11:00 開）</li>
-                    <li><a href="https://naver.me/5o0cdT34" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Musinsa Standard Seongsu 地圖">Musinsa Standard Seongsu</a>（11:00 開）</li>
-                    <li><a href="https://naver.me/Gqf0c27X" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Nyu Nyu 地圖">Nyu Nyu</a>（10:00 開）</li>
-                    <li><a href="https://naver.me/xCjp02or" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 M Play Ground 聖水店地圖">M playground</a>（10:00 開）</li>
+                    <li>
+                      <a
+                        href="https://naver.me/GHLF7adQ"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Loe 聖水店地圖"
+                        >Loe 香水</a
+                      >（11:00 開）
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/5o0cdT34"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Musinsa Standard Seongsu 地圖"
+                        >Musinsa Standard Seongsu</a
+                      >（11:00 開）
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/Gqf0c27X"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Nyu Nyu 地圖"
+                        >Nyu Nyu</a
+                      >（10:00 開）
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/xCjp02or"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 M Play Ground 聖水店地圖"
+                        >M playground</a
+                      >（10:00 開）
+                    </li>
                   </ul>
                 </div>
                 <button
@@ -1711,11 +2004,35 @@
                 <time class="event-time">12:00–13:00</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/x525wi7B" target="_blank" rel="noopener noreferrer" title="在新分頁開啟無垢屋地圖">午餐・無垢屋</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/x525wi7B"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟無垢屋地圖"
+                      >午餐・無垢屋</a
+                    >
+                  </h4>
                   <p>13:00–15:00 繼續逛街。咖啡廳備選：</p>
                   <ul>
-                    <li><a href="https://naver.me/xYNFujhJ" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Standard Bread 地圖">Standard Bread</a></li>
-                    <li><a href="https://naver.me/G8f4B1tW" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Cafe Onion 地圖">Cafe Onion</a></li>
+                    <li>
+                      <a
+                        href="https://naver.me/xYNFujhJ"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Standard Bread 地圖"
+                        >Standard Bread</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/G8f4B1tW"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Cafe Onion 地圖"
+                        >Cafe Onion</a
+                      >
+                    </li>
                   </ul>
                   <div
                     class="food-photo-slot"
@@ -1760,8 +2077,24 @@
                     <li>Olive Young</li>
                     <li>Blue Elephant</li>
                     <li>Lee</li>
-                    <li><a href="https://naver.me/I5whBXUz" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 TROUBADOUR 弘大店地圖">TROUBADOUR 弘大店</a>（平價服飾）</li>
-                    <li><a href="https://naver.me/GYDbw5Nz" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Another Awesome 地圖">Another Awesome</a>（平價服飾）</li>
+                    <li>
+                      <a
+                        href="https://naver.me/I5whBXUz"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 TROUBADOUR 弘大店地圖"
+                        >TROUBADOUR 弘大店</a
+                      >（平價服飾）
+                    </li>
+                    <li>
+                      <a
+                        href="https://naver.me/GYDbw5Nz"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Another Awesome 地圖"
+                        >Another Awesome</a
+                      >（平價服飾）
+                    </li>
                   </ul>
                 </div>
                 <button
@@ -1776,7 +2109,15 @@
                 <time class="event-time">16:30</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4><a href="https://naver.me/FKGdMtlP" target="_blank" rel="noopener noreferrer" title="在新分頁開啟喉嚨水芹菜烤肉地圖">晚餐・喉嚨水芹菜烤肉</a></h4>
+                  <h4>
+                    <a
+                      href="https://naver.me/FKGdMtlP"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟喉嚨水芹菜烤肉地圖"
+                      >晚餐・喉嚨水芹菜烤肉</a
+                    >
+                  </h4>
                   <p>預留排隊時間，之後在弘大逛逛。</p>
                   <div class="event-meta">
                     <span class="tag accent">可能需排隊</span>
@@ -1844,7 +2185,15 @@
                 <time class="event-time">10:00–14:00</time
                 ><span class="event-dot"></span>
                 <div class="event-content">
-                  <h4>明洞逛街・<a href="https://naver.me/G5kYOTfU" target="_blank" rel="noopener noreferrer" title="在新分頁開啟首爾站樂天超市地圖">首爾站樂天超市</a></h4>
+                  <h4>
+                    明洞逛街・<a
+                      href="https://naver.me/G5kYOTfU"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="在新分頁開啟首爾站樂天超市地圖"
+                      >首爾站樂天超市</a
+                    >
+                  </h4>
                 </div>
                 <button
                   class="check-button"
@@ -1860,7 +2209,15 @@
                 <div class="event-content">
                   <h4>廣藏市場</h4>
                   <ul>
-                    <li><a href="https://naver.me/FQuv27j4" target="_blank" rel="noopener noreferrer" title="在新分頁開啟 Ilho 冠軍咖啡地圖">Ilho 冠軍咖啡</a></li>
+                    <li>
+                      <a
+                        href="https://naver.me/FQuv27j4"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="在新分頁開啟 Ilho 冠軍咖啡地圖"
+                        >Ilho 冠軍咖啡</a
+                      >
+                    </li>
                     <li>Garlic Boy 蒜頭麵包</li>
                     <li>綠豆煎餅</li>
                     <li>買棉被</li>
@@ -2033,6 +2390,16 @@
               ><span>桃園機場接送回土城</span>
             </div>
           </article>
+          <section class="map-section" id="map-view" hidden>
+            <iframe
+              class="map-frame"
+              src="https://www.google.com/maps/d/u/0/embed?mid=190Q1SGzo0bEA_yTWXMf98cCaTjeFoNw&ehbc=2E312F&noprof=1"
+              title="首爾行程地圖"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </section>
         </section>
       </main>
       <footer class="footer">
@@ -2040,6 +2407,42 @@
         ><span class="footer-mark">천천히, 잘 먹고 잘 걷기</span>
       </footer>
     </div>
+    <button
+      class="map-toggle"
+      id="show-map"
+      type="button"
+      aria-label="開啟行程地圖"
+      title="開啟行程地圖"
+      aria-controls="map-view"
+      aria-pressed="false"
+    >
+      <svg
+        id="map-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z" />
+        <path d="M9 3v15M15 6v15" />
+      </svg>
+      <svg
+        id="itinerary-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        hidden
+      >
+        <path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" />
+      </svg>
+    </button>
     <a class="back-to-top" href="#top" aria-label="回到頁面頂端">
       <span aria-hidden="true">↑</span>
     </a>
@@ -2047,6 +2450,13 @@
       (() => {
         const tabs = [...document.querySelectorAll(".day-tab")];
         const panels = [...document.querySelectorAll(".day-panel")];
+        const dayTabs = document.querySelector(".day-tabs");
+        const mapView = document.getElementById("map-view");
+        const mapButton = document.getElementById("show-map");
+        const viewTitle = document.getElementById("itinerary-title");
+        const viewEyebrow = document.getElementById("view-eyebrow");
+        const progressTools = document.getElementById("progress-tools");
+        const fontTools = document.getElementById("font-tools");
         const storageKey = "seoul-itinerary-checks-v1";
         const fontSizeStorageKey = "seoul-font-size-v1";
         const fontSizeButtons = [...document.querySelectorAll(".font-control")];
@@ -2054,7 +2464,7 @@
         function setFontSize(size) {
           document.documentElement.style.setProperty(
             "--font-scale",
-            size === "large" ? "1.5" : size === "medium" ? "1.25" : "1",
+            size === "large" ? "1.5" : "1.25",
           );
           fontSizeButtons.forEach((button) => {
             button.setAttribute(
@@ -2072,8 +2482,7 @@
         let savedFontSize = "small";
         try {
           const saved = localStorage.getItem(fontSizeStorageKey);
-          if (saved === "small" || saved === "medium" || saved === "large")
-            savedFontSize = saved;
+          if (saved === "small" || saved === "large") savedFontSize = saved;
         } catch (error) {
           console.warn("Unable to load font size preference.", error);
         }
@@ -2119,17 +2528,74 @@
           });
         }
 
-        function showDayFromUrl() {
-          const day = new URL(window.location.href).searchParams.get("day");
-          const tab = tabs.find((tab) => tab.dataset.day === day) || tabs[0];
-          showDay(tab.dataset.day, false);
+        function showView(view, updateUrl = true) {
+          const isMapView = view === "map";
+          if (updateUrl) {
+            const url = new URL(window.location.href);
+            const currentView = url.searchParams.get("view");
+            if (isMapView && currentView !== "map") {
+              url.searchParams.set("view", "map");
+              window.history.pushState(null, "", url);
+            } else if (!isMapView && currentView === "map") {
+              url.searchParams.delete("view");
+              window.history.pushState(null, "", url);
+            }
+          }
+          dayTabs.hidden = isMapView;
+          mapView.hidden = !isMapView;
+          const activeDay = tabs.find(
+            (tab) => tab.getAttribute("aria-selected") === "true",
+          )?.dataset.day;
+          panels.forEach((panel) => {
+            panel.hidden = isMapView || panel.id !== `panel-${activeDay}`;
+          });
+          viewTitle.textContent = isMapView ? "行程地圖" : "每日行程";
+          viewEyebrow.textContent = isMapView ? "THE MAP" : "THE ITINERARY";
+          progressTools.hidden = isMapView;
+          fontTools.hidden = isMapView;
+          const buttonLabel = isMapView ? "返回每日行程" : "開啟行程地圖";
+          mapButton.setAttribute("aria-label", buttonLabel);
+          mapButton.title = buttonLabel;
+          document
+            .getElementById("map-icon")
+            .toggleAttribute("hidden", isMapView);
+          document
+            .getElementById("itinerary-icon")
+            .toggleAttribute("hidden", !isMapView);
+          mapButton.setAttribute("aria-pressed", String(isMapView));
         }
 
-        window.addEventListener("popstate", showDayFromUrl);
-        showDayFromUrl();
+        function scrollToDayPanel(day) {
+          const panel = panels.find((item) => item.id === `panel-${day}`);
+          panel?.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+
+        function syncViewFromUrl() {
+          const url = new URL(window.location.href);
+          const day = url.searchParams.get("day");
+          const tab = tabs.find((tab) => tab.dataset.day === day) || tabs[0];
+          showDay(tab.dataset.day, false);
+          showView(
+            url.searchParams.get("view") === "map" ? "map" : "itinerary",
+            false,
+          );
+        }
+
+        window.addEventListener("popstate", syncViewFromUrl);
+        syncViewFromUrl();
+
+        mapButton.addEventListener("click", () => {
+          showView(mapView.hidden ? "map" : "itinerary");
+          document.getElementById("itinerary-heading").scrollIntoView({
+            block: "start",
+          });
+        });
 
         tabs.forEach((tab, index) => {
-          tab.addEventListener("click", () => showDay(tab.dataset.day));
+          tab.addEventListener("click", () => {
+            showDay(tab.dataset.day);
+            scrollToDayPanel(tab.dataset.day);
+          });
           tab.addEventListener("keydown", (event) => {
             if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
             event.preventDefault();
@@ -2137,6 +2603,7 @@
             const next = tabs[(index + direction + tabs.length) % tabs.length];
             next.focus();
             showDay(next.dataset.day);
+            scrollToDayPanel(next.dataset.day);
           });
         });
 
